@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  TUTOR
+  COORDINATOR
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum TutoringType {
+  INDIVIDUAL
+  GROUP
+}
+
+enum TutoringStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELED
+  MISSED
+}
+
+enum GoalStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+}
+
+enum AlertType {
+  NO_RECENT_TUTORING
+  LOW_ATTENDANCE
+  OVERDUE_GOAL
+  MISSED_SESSION
+  PERFORMANCE_DROP
+}
+
+model User {
+  id           String     @id @default(uuid())
+  name         String
+  email        String     @unique
+  passwordHash String
+  role         Role
+  status       UserStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  student      Student?
+  tutor        Tutor?
+  goalsCreated Goal[]     @relation("GoalCreator")
+}
+
+model School {
+  id          String       @id @default(uuid())
+  name        String
+  city        String?
+  state       String?
+  createdAt   DateTime     @default(now())
+  classGroups ClassGroup[]
+}
+
+model ClassGroup {
+  id        String    @id @default(uuid())
+  name      String
+  year      Int
+  schoolId  String
+  school    School    @relation(fields: [schoolId], references: [id])
+  students  Student[]
+  createdAt DateTime  @default(now())
+}
+
+model Student {
+  id             String               @id @default(uuid())
+  userId         String               @unique
+  registration   String               @unique
+  classGroupId   String
+  birthDate      DateTime?
+  user           User                 @relation(fields: [userId], references: [id])
+  classGroup     ClassGroup           @relation(fields: [classGroupId], references: [id])
+  participants   SessionParticipant[]
+  attendances    Attendance[]
+  goals          Goal[]
+  lifeProject    LifeProject?
+  indicators     Indicator[]
+  alerts         Alert[]
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+}
+
+model Tutor {
+  id        String             @id @default(uuid())
+  userId    String             @unique
+  subject   String?
+  user      User               @relation(fields: [userId], references: [id])
+  sessions  TutoringSession[]
+  createdAt DateTime           @default(now())
+}
+
+model TutoringSession {
+  id           String               @id @default(uuid())
+  tutorId      String
+  type         TutoringType
+  title        String
+  description  String?
+  observations String?
+  scheduledAt  DateTime
+  completedAt  DateTime?
+  status       TutoringStatus       @default(SCHEDULED)
+  periodicity  String?
+  tutor        Tutor                @relation(fields: [tutorId], references: [id])
+  participants SessionParticipant[]
+  attendances  Attendance[]
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+}
+
+model SessionParticipant {
+  id        String           @id @default(uuid())
+  sessionId String
+  studentId String
+  session   TutoringSession  @relation(fields: [sessionId], references: [id])
+  student   Student          @relation(fields: [studentId], references: [id])
+
+  @@unique([sessionId, studentId])
+}
+
+model Attendance {
+  id        String          @id @default(uuid())
+  sessionId String
+  studentId String
+  present   Boolean
+  notes     String?
+  session   TutoringSession @relation(fields: [sessionId], references: [id])
+  student   Student         @relation(fields: [studentId], references: [id])
+  createdAt DateTime        @default(now())
+
+  @@unique([sessionId, studentId])
+}
+
+model Goal {
+  id          String       @id @default(uuid())
+  studentId   String
+  title       String
+  description String?
+  status      GoalStatus   @default(OPEN)
+  dueDate     DateTime?
+  createdById String
+  student     Student      @relation(fields: [studentId], references: [id])
+  createdBy   User         @relation("GoalCreator", fields: [createdById], references: [id])
+  actionPlans ActionPlan[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model ActionPlan {
+  id          String   @id @default(uuid())
+  goalId      String
+  description String
+  dueDate     DateTime?
+  completed   Boolean  @default(false)
+  goal        Goal     @relation(fields: [goalId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model LifeProject {
+  id          String   @id @default(uuid())
+  studentId   String   @unique
+  interests   String?
+  strengths   String?
+  dreams      String?
+  nextSteps   String?
+  student     Student  @relation(fields: [studentId], references: [id])
+  updatedAt   DateTime @updatedAt
+}
+
+model Indicator {
+  id                  String   @id @default(uuid())
+  studentId           String
+  academicPerformance Float
+  participation       Float
+  attendanceRate      Float
+  behaviorEvolution   Float
+  goalCompletion      Float
+  referenceMonth      DateTime
+  student             Student  @relation(fields: [studentId], references: [id])
+  createdAt           DateTime @default(now())
+}
+
+model Alert {
+  id        String    @id @default(uuid())
+  studentId String
+  type      AlertType
+  message   String
+  resolved  Boolean   @default(false)
+  student   Student   @relation(fields: [studentId], references: [id])
+  createdAt DateTime  @default(now())
+}
+
+model Report {
+  id        String   @id @default(uuid())
+  title     String
+  type      String
+  filters   Json?
+  fileUrl   String?
+  createdAt DateTime @default(now())
+}
