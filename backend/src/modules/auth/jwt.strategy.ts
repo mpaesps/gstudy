@@ -6,7 +6,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 export type JwtPayload = {
   sub: string;
   email: string;
-  role: string;
+  role: Role;
 };
 
 @Injectable()
@@ -27,3 +27,4 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     };
   }
 }
+import { Role } from '@prisma/client';

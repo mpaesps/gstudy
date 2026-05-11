@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { Role } from '@prisma/client';
+import { Request } from 'express';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { AuthenticatedUser } from '../auth/authenticated-user';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CompleteTutoringSessionDto } from './dto/complete-tutoring-session.dto';
 import { CreateTutoringSessionDto } from './dto/create-tutoring-session.dto';
@@ -19,13 +21,13 @@ export class TutoringSessionsController {
   }
 
   @Get()
-  findAll() {
-    return this.service.findAll();
+  findAll(@Req() request: Request) {
+    return this.service.findAll(request.user as AuthenticatedUser);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.service.findOne(id);
+  findOne(@Param('id') id: string, @Req() request: Request) {
+    return this.service.findOne(id, request.user as AuthenticatedUser);
   }
 
   @Post(':id/complete')

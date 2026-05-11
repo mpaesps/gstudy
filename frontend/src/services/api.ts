@@ -14,3 +14,22 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
+
+export function setAuthSession(accessToken: string, user: unknown) {
+  localStorage.setItem('gstudy.token', accessToken);
+  localStorage.setItem('gstudy.user', JSON.stringify(user));
+}
+
+export function clearAuthSession() {
+  localStorage.removeItem('gstudy.token');
+  localStorage.removeItem('gstudy.user');
+}
+
+export function getStoredUser<T>() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  const stored = localStorage.getItem('gstudy.user');
+  return stored ? (JSON.parse(stored) as T) : null;
+}

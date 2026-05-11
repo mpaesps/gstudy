@@ -1,9 +1,16 @@
 'use client';
 
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { chartData } from '@/lib/mock-data';
 
-export function DashboardChart() {
+type ChartItem = {
+  month: string;
+  desempenho: number;
+  participacao: number;
+};
+
+export function DashboardChart({ data }: { data: ChartItem[] }) {
+  const chartData = data.length ? data : [{ month: '-', desempenho: 0, participacao: 0 }];
+
   return (
     <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">

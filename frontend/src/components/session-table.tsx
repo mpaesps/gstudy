@@ -16,7 +16,7 @@ export function SessionTable({ rows }: { rows: SessionRow[] }) {
         </thead>
         <tbody className="divide-y divide-slate-100">
           {rows.map((row) => (
-            <tr key={`${row.student}-${row.date}`} className="text-slate-700">
+            <tr key={row.id} className="text-slate-700">
               <td className="px-4 py-3 font-medium text-slate-950">{row.student}</td>
               <td className="px-4 py-3">{row.tutor}</td>
               <td className="px-4 py-3">{row.type}</td>

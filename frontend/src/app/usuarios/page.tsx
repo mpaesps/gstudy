@@ -1,14 +1,30 @@
-import { AppShell } from '@/components/app-shell';
+'use client';
 
-const users = [
-  ['Gabriel Rocha', 'COORDINATOR', 'Ativo'],
-  ['Prof. Rafael', 'TUTOR', 'Ativo'],
-  ['Ana Clara', 'STUDENT', 'Ativo'],
-];
+import { useEffect, useState } from 'react';
+import { AppShell } from '@/components/app-shell';
+import { api } from '@/services/api';
+
+type UserRow = {
+  id: string;
+  name: string;
+  role: string;
+  status: string;
+};
 
 export default function UsersPage() {
+  const [users, setUsers] = useState<UserRow[]>([]);
+
+  useEffect(() => {
+    async function loadUsers() {
+      const response = await api.get<UserRow[]>('/users');
+      setUsers(response.data);
+    }
+
+    void loadUsers();
+  }, []);
+
   return (
-    <AppShell title="Gerenciamento de usuarios">
+    <AppShell title="Gerenciamento de usuarios" allowedRoles={['COORDINATOR', 'ADMIN']}>
       <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
         <table className="w-full text-left text-sm">
           <thead className="bg-slate-50 text-xs uppercase text-slate-500">
@@ -19,8 +35,8 @@ export default function UsersPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {users.map(([name, role, status]) => (
-              <tr key={name}>
+            {users.map(({ id, name, role, status }) => (
+              <tr key={id}>
                 <td className="px-4 py-3 font-medium text-slate-950">{name}</td>
                 <td className="px-4 py-3">{role}</td>
                 <td className="px-4 py-3">{status}</td>

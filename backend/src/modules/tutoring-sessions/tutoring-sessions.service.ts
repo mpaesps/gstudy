@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { TutoringStatus, TutoringType } from '@prisma/client';
+import { Role, TutoringStatus, TutoringType } from '@prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
+import { AuthenticatedUser } from '../auth/authenticated-user';
 import { CompleteTutoringSessionDto } from './dto/complete-tutoring-session.dto';
 import { CreateTutoringSessionDto } from './dto/create-tutoring-session.dto';
 
@@ -34,14 +35,17 @@ export class TutoringSessionsService {
     });
   }
 
-  findAll() {
-    return this.prisma.tutoringSession.findMany({
+  async findAll(user: AuthenticatedUser) {
+    const sessions = await this.prisma.tutoringSession.findMany({
+      where: await this.visibilityWhere(user),
       orderBy: { scheduledAt: 'desc' },
       include: this.defaultInclude(),
     });
+
+    return sessions.map((session) => this.withCalendarStatus(session));
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, user?: AuthenticatedUser) {
     const session = await this.prisma.tutoringSession.findUnique({
       where: { id },
       include: this.defaultInclude(),
@@ -51,7 +55,20 @@ export class TutoringSessionsService {
       throw new NotFoundException('Tutoria nao encontrada');
     }
 
-    return session;
+    if (user) {
+      const visibleSessions = await this.prisma.tutoringSession.count({
+        where: {
+          id,
+          ...(await this.visibilityWhere(user)),
+        },
+      });
+
+      if (!visibleSessions) {
+        throw new NotFoundException('Tutoria nao encontrada');
+      }
+    }
+
+    return this.withCalendarStatus(session);
   }
 
   async complete(id: string, dto: CompleteTutoringSessionDto) {
@@ -80,6 +97,28 @@ export class TutoringSessionsService {
       },
       include: this.defaultInclude(),
     });
+  }
+
+  private async visibilityWhere(user: AuthenticatedUser) {
+    if (user.role === Role.COORDINATOR || user.role === Role.ADMIN) {
+      return {};
+    }
+
+    if (user.role === Role.TUTOR) {
+      const tutor = await this.prisma.tutor.findUnique({ where: { userId: user.id } });
+      return tutor ? { tutorId: tutor.id } : { id: '__not_found__' };
+    }
+
+    const student = await this.prisma.student.findUnique({ where: { userId: user.id } });
+    return student ? { participants: { some: { studentId: student.id } } } : { id: '__not_found__' };
+  }
+
+  private withCalendarStatus<T extends { scheduledAt: Date; status: TutoringStatus }>(session: T) {
+    if (session.status === TutoringStatus.SCHEDULED && session.scheduledAt < new Date()) {
+      return { ...session, calendarStatus: TutoringStatus.MISSED };
+    }
+
+    return { ...session, calendarStatus: session.status };
   }
 
   private defaultInclude() {

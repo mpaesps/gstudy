@@ -1,13 +1,17 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Role } from '@prisma/client';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { RolesGuard } from '../../common/guards/roles.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { StudentsService } from './students.service';
 
 @Controller('students')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
   @Get()
+  @Roles(Role.TUTOR, Role.COORDINATOR, Role.ADMIN)
   findAll() {
     return this.studentsService.findAll();
   }
