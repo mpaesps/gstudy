@@ -5,7 +5,7 @@ import { AppShell } from '@/components/app-shell';
 import { DashboardChart } from '@/components/dashboard-chart';
 import { MetricCard } from '@/components/metric-card';
 import { SessionTable } from '@/components/session-table';
-import { api } from '@/services/api';
+import { cachedGet } from '@/services/api';
 import { ApiSession, Metric } from '@/types/domain';
 import { toSessionRow } from '@/lib/formatters';
 
@@ -31,14 +31,14 @@ export default function CoordinatorDashboard() {
   useEffect(() => {
     async function loadData() {
       const [dashboardResponse, sessionsResponse, studentsResponse] = await Promise.all([
-        api.get<CoordinatorDashboardData>('/dashboards/coordinator'),
-        api.get<ApiSession[]>('/tutoring-sessions'),
-        api.get<StudentWithoutFollowup[]>('/reports/students-without-followup'),
+        cachedGet<CoordinatorDashboardData>('/dashboards/coordinator', { ttlMs: 30_000 }),
+        cachedGet<ApiSession[]>('/tutoring-sessions', { ttlMs: 30_000 }),
+        cachedGet<StudentWithoutFollowup[]>('/reports/students-without-followup', { ttlMs: 60_000 }),
       ]);
 
-      setDashboard(dashboardResponse.data);
-      setSessions(sessionsResponse.data);
-      setStudentsWithoutFollowup(studentsResponse.data);
+      setDashboard(dashboardResponse);
+      setSessions(sessionsResponse);
+      setStudentsWithoutFollowup(studentsResponse);
     }
 
     void loadData();

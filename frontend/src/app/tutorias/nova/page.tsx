@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from 'react';
 import { AppShell } from '@/components/app-shell';
-import { api } from '@/services/api';
+import { api, cachedGet, clearApiCache } from '@/services/api';
 import { useAuth } from '@/hooks/use-auth';
 
 type Tutor = {
@@ -33,15 +33,15 @@ export default function NewTutoringPage() {
   useEffect(() => {
     async function loadOptions() {
       const [tutorsResponse, studentsResponse] = await Promise.all([
-        api.get<Tutor[]>('/tutors'),
-        api.get<Student[]>('/students'),
+        cachedGet<Tutor[]>('/tutors', { ttlMs: 60_000 }),
+        cachedGet<Student[]>('/students', { ttlMs: 60_000 }),
       ]);
-      setTutors(tutorsResponse.data);
-      setStudents(studentsResponse.data);
+      setTutors(tutorsResponse);
+      setStudents(studentsResponse);
       setForm((current) => ({
         ...current,
-        tutorId: user?.role === 'TUTOR' ? user.tutor?.id ?? '' : tutorsResponse.data[0]?.id ?? '',
-        studentId: studentsResponse.data[0]?.id ?? '',
+        tutorId: user?.role === 'TUTOR' ? user.tutor?.id ?? '' : tutorsResponse[0]?.id ?? '',
+        studentId: studentsResponse[0]?.id ?? '',
       }));
     }
 
@@ -65,6 +65,7 @@ export default function NewTutoringPage() {
     });
 
     setMessage('Tutoria registrada com sucesso.');
+    clearApiCache();
   }
 
   return (

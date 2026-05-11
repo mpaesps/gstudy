@@ -1,11 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Role } from '@prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
+import { AuthenticatedUser } from '../auth/authenticated-user';
 
 @Injectable()
 export class DashboardsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async student(studentId: string) {
+  async student(studentId: string, user?: AuthenticatedUser) {
+    if (user?.role === Role.STUDENT) {
+      const studentOwner = await this.prisma.student.findFirst({ where: { id: studentId, userId: user.id } });
+      if (!studentOwner) {
+        throw new ForbiddenException('Aluno pode acessar apenas o proprio dashboard');
+      }
+    }
+
     const [student, upcomingSessions, openGoals, indicators] = await Promise.all([
       this.prisma.student.findUnique({ where: { id: studentId }, include: { user: true, lifeProject: true } }),
       this.prisma.sessionParticipant.findMany({

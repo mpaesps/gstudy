@@ -2,13 +2,15 @@
 
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ShieldCheck } from 'lucide-react';
+import { Moon, ShieldCheck, Sun } from 'lucide-react';
 import { api, setAuthSession } from '@/services/api';
 import { getHomeByRole } from '@/hooks/use-auth';
+import { useTheme } from '@/hooks/use-theme';
 import { UserProfile } from '@/types/domain';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -35,7 +37,16 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="grid min-h-screen place-items-center bg-[linear-gradient(120deg,#eef5ff,#f8fafc)] px-4">
+    <main className="grid min-h-screen place-items-center bg-[linear-gradient(120deg,#eef5ff,#f8fafc)] px-4 dark:bg-none dark:bg-slate-950">
+      <button
+        type="button"
+        onClick={toggleTheme}
+        className="fixed right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm hover:bg-slate-50"
+        aria-label="Alternar tema"
+        title={theme === 'dark' ? 'Tema claro' : 'Tema escuro'}
+      >
+        {theme === 'dark' ? <Sun size={21} /> : <Moon size={21} />}
+      </button>
       <section className="grid w-full max-w-5xl overflow-hidden rounded-lg border border-slate-200 bg-white shadow-panel md:grid-cols-[1fr_0.9fr]">
         <div className="p-8 md:p-12">
           <div className="mb-10 flex items-center gap-3">

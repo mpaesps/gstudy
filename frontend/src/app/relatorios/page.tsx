@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { AppShell } from '@/components/app-shell';
-import { api } from '@/services/api';
+import { cachedGet } from '@/services/api';
 
 const reports = [
   { title: 'Relatorio de tutorias', endpoint: '/reports/tutoring' },
@@ -15,8 +15,8 @@ export default function ReportsPage() {
 
   useEffect(() => {
     async function loadReports() {
-      const responses = await Promise.all(reports.map((report) => api.get<unknown[]>(report.endpoint)));
-      setCounts(Object.fromEntries(reports.map((report, index) => [report.endpoint, responses[index].data.length])));
+      const responses = await Promise.all(reports.map((report) => cachedGet<unknown[]>(report.endpoint, { ttlMs: 60_000 })));
+      setCounts(Object.fromEntries(reports.map((report, index) => [report.endpoint, responses[index].length])));
     }
 
     void loadReports();

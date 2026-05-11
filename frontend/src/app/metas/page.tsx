@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { AppShell } from '@/components/app-shell';
 import { useAuth } from '@/hooks/use-auth';
-import { api } from '@/services/api';
+import { cachedGet } from '@/services/api';
 
 type Goal = {
   id: string;
@@ -23,8 +23,8 @@ export default function GoalsPage() {
         return;
       }
 
-      const response = await api.get<Goal[]>(`/students/${user.student.id}/goals`);
-      setGoals(response.data);
+      const data = await cachedGet<Goal[]>(`/students/${user.student.id}/goals`, { ttlMs: 60_000 });
+      setGoals(data);
     }
 
     void loadGoals();

@@ -5,7 +5,7 @@ import { AppShell } from '@/components/app-shell';
 import { DashboardChart } from '@/components/dashboard-chart';
 import { MetricCard } from '@/components/metric-card';
 import { useAuth } from '@/hooks/use-auth';
-import { api } from '@/services/api';
+import { cachedGet } from '@/services/api';
 import { Metric } from '@/types/domain';
 import { percent } from '@/lib/formatters';
 
@@ -30,7 +30,7 @@ type StudentDashboardData = {
 };
 
 export default function StudentDashboard() {
-  const { user } = useAuth(['STUDENT', 'TUTOR', 'COORDINATOR', 'ADMIN']);
+  const { user } = useAuth(['STUDENT']);
   const [dashboard, setDashboard] = useState<StudentDashboardData | null>(null);
 
   useEffect(() => {
@@ -39,8 +39,8 @@ export default function StudentDashboard() {
         return;
       }
 
-      const response = await api.get<StudentDashboardData>(`/dashboards/student/${user.student.id}`);
-      setDashboard(response.data);
+      const data = await cachedGet<StudentDashboardData>(`/dashboards/student/${user.student.id}`, { ttlMs: 30_000 });
+      setDashboard(data);
     }
 
     void loadData();
@@ -61,7 +61,7 @@ export default function StudentDashboard() {
   })) ?? [];
 
   return (
-    <AppShell title="Dashboard do aluno" allowedRoles={['STUDENT', 'TUTOR', 'COORDINATOR', 'ADMIN']}>
+    <AppShell title="Dashboard do aluno" allowedRoles={['STUDENT']}>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {studentMetrics.map((metric) => (
           <MetricCard key={metric.label} metric={metric} />

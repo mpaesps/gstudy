@@ -5,7 +5,7 @@ import { AppShell } from '@/components/app-shell';
 import { MetricCard } from '@/components/metric-card';
 import { SessionTable } from '@/components/session-table';
 import { useAuth } from '@/hooks/use-auth';
-import { api } from '@/services/api';
+import { cachedGet } from '@/services/api';
 import { ApiSession, Metric } from '@/types/domain';
 import { toSessionRow } from '@/lib/formatters';
 
@@ -25,12 +25,12 @@ export default function TutorDashboard() {
     async function loadData() {
       const tutorId = user?.role === 'TUTOR' ? user.tutor?.id : undefined;
       const [dashboardResponse, sessionsResponse] = await Promise.all([
-        api.get<TutorDashboardData>('/dashboards/tutor', { params: tutorId ? { tutorId } : {} }),
-        api.get<ApiSession[]>('/tutoring-sessions'),
+        cachedGet<TutorDashboardData>('/dashboards/tutor', { params: tutorId ? { tutorId } : {}, ttlMs: 30_000 }),
+        cachedGet<ApiSession[]>('/tutoring-sessions', { ttlMs: 30_000 }),
       ]);
 
-      setDashboard(dashboardResponse.data);
-      setSessions(sessionsResponse.data);
+      setDashboard(dashboardResponse);
+      setSessions(sessionsResponse);
     }
 
     if (user) {

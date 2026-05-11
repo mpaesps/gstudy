@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { AppShell } from '@/components/app-shell';
 import { useAuth } from '@/hooks/use-auth';
-import { api } from '@/services/api';
+import { cachedGet } from '@/services/api';
 
 type LifeProject = {
   interests?: string | null;
@@ -23,8 +23,8 @@ export default function LifeProjectPage() {
         return;
       }
 
-      const response = await api.get<LifeProject | null>(`/students/${user.student.id}/life-project`);
-      setLifeProject(response.data);
+      const data = await cachedGet<LifeProject | null>(`/students/${user.student.id}/life-project`, { ttlMs: 60_000 });
+      setLifeProject(data);
     }
 
     void loadLifeProject();

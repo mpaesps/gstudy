@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, Request, UseGuards } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { AuthenticatedUser } from '../auth/authenticated-user';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DashboardsService } from './dashboards.service';
 
@@ -11,9 +12,9 @@ export class DashboardsController {
   constructor(private readonly dashboardsService: DashboardsService) {}
 
   @Get('student/:id')
-  @Roles(Role.STUDENT, Role.TUTOR, Role.COORDINATOR, Role.ADMIN)
-  student(@Param('id') id: string) {
-    return this.dashboardsService.student(id);
+  @Roles(Role.STUDENT, Role.ADMIN)
+  student(@Param('id') id: string, @Request() request: { user: AuthenticatedUser }) {
+    return this.dashboardsService.student(id, request.user);
   }
 
   @Get('tutor')

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { AppShell } from '@/components/app-shell';
 import { SessionTable } from '@/components/session-table';
-import { api } from '@/services/api';
+import { cachedGet } from '@/services/api';
 import { ApiSession } from '@/types/domain';
 import { toSessionRow } from '@/lib/formatters';
 
@@ -12,8 +12,8 @@ export default function HistoryPage() {
 
   useEffect(() => {
     async function loadData() {
-      const response = await api.get<ApiSession[]>('/tutoring-sessions');
-      setSessions(response.data);
+      const data = await cachedGet<ApiSession[]>('/tutoring-sessions', { ttlMs: 30_000 });
+      setSessions(data);
     }
 
     void loadData();
