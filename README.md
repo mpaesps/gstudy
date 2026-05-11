@@ -1,6 +1,6 @@
 # Gstudy
 
-Sistema web de gerenciamento de tutorias escolares desenvolvido como Projeto Integrador/TCC.
+Sistema web de gerenciamento de tutorias escolares desenvolvido como Projeto Integrador
 
 ## Arquitetura
 
