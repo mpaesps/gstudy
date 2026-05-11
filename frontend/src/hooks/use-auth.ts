@@ -20,8 +20,11 @@ export function useAuth(allowedRoles?: Role[]) {
   const router = useRouter();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const allowedRoleKey = allowedRoles?.join('|') ?? '';
 
   useEffect(() => {
+    const allowedRoleSet = new Set(allowedRoleKey ? (allowedRoleKey.split('|') as Role[]) : []);
+
     async function loadUser() {
       const token = localStorage.getItem('gstudy.token');
       if (!token) {
@@ -34,7 +37,7 @@ export function useAuth(allowedRoles?: Role[]) {
         localStorage.setItem('gstudy.user', JSON.stringify(response.data));
         setUser(response.data);
 
-        if (allowedRoles?.length && !allowedRoles.includes(response.data.role)) {
+        if (allowedRoleSet.size && !allowedRoleSet.has(response.data.role)) {
           router.replace(getHomeByRole(response.data.role));
           return;
         }
@@ -53,7 +56,7 @@ export function useAuth(allowedRoles?: Role[]) {
     }
 
     void loadUser();
-  }, [allowedRoles, router]);
+  }, [allowedRoleKey, router]);
 
   return { user, loading };
 }
