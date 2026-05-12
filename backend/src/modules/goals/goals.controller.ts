@@ -14,7 +14,7 @@ export class GoalsController {
   constructor(private readonly goalsService: GoalsService) {}
 
   @Post('goals')
-  @Roles(Role.TUTOR, Role.COORDINATOR, Role.ADMIN)
+  @Roles(Role.TUTOR)
   create(@Body() dto: CreateGoalDto, @Request() request: { user: AuthenticatedUser }) {
     return this.goalsService.create(dto, request.user);
   }

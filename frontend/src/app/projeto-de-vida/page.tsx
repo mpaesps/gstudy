@@ -93,7 +93,7 @@ export default function LifeProjectPage() {
   ];
 
   const activeGoals = goals.filter((goal) => ['OPEN', 'IN_PROGRESS'].includes(goal.status));
-  const canCreateGoals = user?.role === 'TUTOR' || user?.role === 'COORDINATOR' || user?.role === 'ADMIN';
+  const canCreateGoals = user?.role === 'TUTOR';
   const isCoordinationView = user?.role === 'COORDINATOR' || user?.role === 'ADMIN';
   const selectedStudent = students.find((student) => student.id === selectedStudentId);
 
@@ -126,7 +126,7 @@ export default function LifeProjectPage() {
 
   return (
     <AppShell title="Projeto de Vida">
-      {user?.role !== 'STUDENT' ? (
+      {user?.role !== 'STUDENT' && !isCoordinationView ? (
         <section className="mb-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <label className="text-sm font-medium text-slate-700">
             Aluno registrado
@@ -179,32 +179,70 @@ export default function LifeProjectPage() {
           </div>
         </div>
 
+        {isCoordinationView ? (
+          <label className="mt-4 block text-sm font-medium text-slate-700">
+            Aluno
+            <select
+              value={selectedStudentId}
+              onChange={(event) => setSelectedStudentId(event.target.value)}
+              className="mt-2 w-full rounded-md border border-slate-300 px-3 py-3 outline-none focus:border-brand-600 md:max-w-md"
+            >
+              {students.map((student) => (
+                <option key={student.id} value={student.id}>
+                  {student.user?.name ?? student.registration ?? student.id}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+
         <div className="mt-4 grid gap-4 md:grid-cols-3">
           {activeGoals.length ? activeGoals.map((goal) => (
             <article key={goal.id} className="rounded-md border border-slate-200 p-4">
-              <p className="font-semibold text-slate-950">{goal.title}</p>
-              <p className="mt-1 text-sm text-slate-500">Aluno: {goal.student?.user?.name ?? selectedStudent?.user?.name ?? 'Nao informado'}</p>
-              <p className="text-sm text-slate-500">Professor: {goal.createdBy?.name ?? 'Nao informado'}</p>
-              {goal.description ? <p className="mt-2 text-sm text-slate-500">{goal.description}</p> : null}
-              <p className="mt-3 text-sm font-medium text-slate-700">
-                Prazo: {goal.dueDate ? formatDate(goal.dueDate) : 'Nao informado'}
-              </p>
               {isCoordinationView ? (
-                <dl className="mt-3 space-y-2 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm">
+                <dl className="space-y-3 text-sm">
+                  <div>
+                    <dt className="text-xs font-semibold uppercase text-slate-500">Aluno</dt>
+                    <dd className="mt-1 font-medium text-slate-950">{goal.student?.user?.name ?? selectedStudent?.user?.name ?? 'Nao informado'}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs font-semibold uppercase text-slate-500">Professor</dt>
+                    <dd className="mt-1 font-medium text-slate-950">{goal.createdBy?.name ?? 'Nao informado'}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs font-semibold uppercase text-slate-500">Registro</dt>
+                    <dd className="mt-1 whitespace-pre-wrap text-slate-700">
+                      {goal.description ? `${goal.title}\n${goal.description}` : goal.title}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs font-semibold uppercase text-slate-500">Prazo</dt>
+                    <dd className="mt-1 font-medium text-slate-950">{goal.dueDate ? formatDate(goal.dueDate) : 'Nao informado'}</dd>
+                  </div>
                   <div>
                     <dt className="text-xs font-semibold uppercase text-slate-500">Interesses</dt>
                     <dd className="mt-1 whitespace-pre-wrap text-slate-700">{lifeProject?.interests || 'Nao informado'}</dd>
                   </div>
                   <div>
-                    <dt className="text-xs font-semibold uppercase text-slate-500">Pontos fortes</dt>
-                    <dd className="mt-1 whitespace-pre-wrap text-slate-700">{lifeProject?.strengths || 'Nao informado'}</dd>
-                  </div>
-                  <div>
                     <dt className="text-xs font-semibold uppercase text-slate-500">Sonhos</dt>
                     <dd className="mt-1 whitespace-pre-wrap text-slate-700">{lifeProject?.dreams || 'Nao informado'}</dd>
                   </div>
+                  <div>
+                    <dt className="text-xs font-semibold uppercase text-slate-500">Pontos Fortes</dt>
+                    <dd className="mt-1 whitespace-pre-wrap text-slate-700">{lifeProject?.strengths || 'Nao informado'}</dd>
+                  </div>
                 </dl>
-              ) : null}
+              ) : (
+                <>
+                  <p className="font-semibold text-slate-950">{goal.title}</p>
+                  <p className="mt-1 text-sm text-slate-500">Aluno: {goal.student?.user?.name ?? selectedStudent?.user?.name ?? 'Nao informado'}</p>
+                  <p className="text-sm text-slate-500">Professor: {goal.createdBy?.name ?? 'Nao informado'}</p>
+                  {goal.description ? <p className="mt-2 text-sm text-slate-500">{goal.description}</p> : null}
+                  <p className="mt-3 text-sm font-medium text-slate-700">
+                    Prazo: {goal.dueDate ? formatDate(goal.dueDate) : 'Nao informado'}
+                  </p>
+                </>
+              )}
             </article>
           )) : <p className="text-sm text-slate-500">Nenhuma meta aberta para usar como proximo passo.</p>}
         </div>
