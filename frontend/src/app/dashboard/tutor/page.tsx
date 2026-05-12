@@ -3,11 +3,10 @@
 import { useEffect, useState } from 'react';
 import { AppShell } from '@/components/app-shell';
 import { MetricCard } from '@/components/metric-card';
-import { SessionTable } from '@/components/session-table';
+import { SessionHistoryList } from '@/components/session-history-list';
 import { useAuth } from '@/hooks/use-auth';
 import { cachedGet } from '@/services/api';
 import { ApiSession, Metric } from '@/types/domain';
-import { toSessionRow } from '@/lib/formatters';
 
 type TutorDashboardData = {
   todaySessions: number;
@@ -52,10 +51,10 @@ export default function TutorDashboard() {
           <MetricCard key={metric.label} metric={metric} />
         ))}
       </div>
-      <section className="mt-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-950">Atendimentos do tutor</h2>
-        <p className="mb-4 text-sm text-slate-500">Tutorias registradas, pendentes e alunos acompanhados.</p>
-        <SessionTable rows={sessions.map(toSessionRow)} />
+      <section className="mt-5">
+        <h2 className="text-lg font-semibold text-slate-950">Historico de tutorias</h2>
+        <p className="mb-4 text-sm text-slate-500">Registros completos para leitura do professor.</p>
+        <SessionHistoryList sessions={sessions} />
       </section>
     </AppShell>
   );

@@ -30,6 +30,9 @@ export type ApiSession = {
   id: string;
   type: 'INDIVIDUAL' | 'GROUP';
   title: string;
+  description?: string | null;
+  observations?: string | null;
+  periodicity?: string | null;
   scheduledAt: string;
   status: string;
   calendarStatus?: string;
