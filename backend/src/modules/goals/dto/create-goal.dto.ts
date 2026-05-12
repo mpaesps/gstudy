@@ -15,6 +15,4 @@ export class CreateGoalDto {
   @IsDateString()
   dueDate?: string;
 
-  @IsString()
-  createdById!: string;
 }
