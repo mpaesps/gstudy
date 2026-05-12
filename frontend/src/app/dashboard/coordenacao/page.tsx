@@ -245,7 +245,7 @@ export default function CoordinatorDashboard() {
               {studentDashboard?.openGoals?.length ? studentDashboard.openGoals.map((goal) => (
                 <a
                   key={goal.id}
-                  href={`/metas?studentId=${selectedStudentId}`}
+                  href={`/projeto-de-vida?studentId=${selectedStudentId}`}
                   className="block rounded-md border border-slate-200 p-3 text-sm hover:border-brand-500"
                 >
                   <span className="font-medium text-slate-950">{goal.title}</span>

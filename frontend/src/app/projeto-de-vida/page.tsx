@@ -94,6 +94,7 @@ export default function LifeProjectPage() {
 
   const activeGoals = goals.filter((goal) => ['OPEN', 'IN_PROGRESS'].includes(goal.status));
   const canCreateGoals = user?.role === 'TUTOR' || user?.role === 'COORDINATOR' || user?.role === 'ADMIN';
+  const isCoordinationView = user?.role === 'COORDINATOR' || user?.role === 'ADMIN';
   const selectedStudent = students.find((student) => student.id === selectedStudentId);
 
   async function handleCreateGoal(event: FormEvent<HTMLFormElement>) {
@@ -150,32 +151,44 @@ export default function LifeProjectPage() {
         </section>
       ) : null}
 
-      <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="grid gap-5 md:grid-cols-2">
-          {fields.map(([label, value]) => (
-            <label key={label} className="text-sm font-medium text-slate-700">
-              {label}
-              <textarea
-                rows={5}
-                readOnly
-                value={value ?? ''}
-                className="mt-2 w-full rounded-md border border-slate-300 px-3 py-3 outline-none focus:border-brand-600"
-              />
-            </label>
-          ))}
-        </div>
-      </section>
+      {!isCoordinationView ? (
+        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="grid gap-5 md:grid-cols-2">
+            {fields.map(([label, value]) => (
+              <label key={label} className="text-sm font-medium text-slate-700">
+                {label}
+                <textarea
+                  rows={5}
+                  readOnly
+                  value={value ?? ''}
+                  className="mt-2 w-full rounded-md border border-slate-300 px-3 py-3 outline-none focus:border-brand-600"
+                />
+              </label>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
-      <section className="mt-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+      <section className={`${isCoordinationView ? '' : 'mt-5'} rounded-lg border border-slate-200 bg-white p-5 shadow-sm`}>
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className="text-lg font-semibold text-slate-950">Proximos passos</h2>
-            <p className="text-sm text-slate-500">As metas pedagogicas abertas representam os proximos passos do Projeto de Vida.</p>
+            <p className="text-sm text-slate-500">
+              Interesses, pontos fortes, sonhos e metas abertas orientam os proximos passos do Projeto de Vida.
+            </p>
           </div>
-          <a href={`/metas${selectedStudentId ? `?studentId=${selectedStudentId}` : ''}`} className="text-sm font-semibold text-brand-600 hover:text-brand-700">
-            Ver metas
-          </a>
         </div>
+
+        {isCoordinationView ? (
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            {fields.map(([label, value]) => (
+              <article key={label} className="rounded-md border border-slate-200 bg-slate-50 p-4">
+                <p className="text-xs font-semibold uppercase text-slate-500">{label}</p>
+                <p className="mt-2 whitespace-pre-wrap text-sm text-slate-700">{value || 'Nao informado'}</p>
+              </article>
+            ))}
+          </div>
+        ) : null}
 
         <div className="mt-4 grid gap-4 md:grid-cols-3">
           {activeGoals.length ? activeGoals.map((goal) => (
@@ -202,7 +215,7 @@ export default function LifeProjectPage() {
       {canCreateGoals ? (
         <section className="mt-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="text-lg font-semibold text-slate-950">Adicionar meta aos proximos passos</h2>
-          <p className="text-sm text-slate-500">A meta criada aqui aparece automaticamente na aba Metas do aluno selecionado.</p>
+          <p className="text-sm text-slate-500">A meta criada aqui aparece automaticamente em Proximos passos do aluno selecionado.</p>
           <form onSubmit={handleCreateGoal} className="mt-4 grid gap-4 md:grid-cols-2">
             <label className="text-sm font-medium text-slate-700">
               Titulo da meta

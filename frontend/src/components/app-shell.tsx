@@ -14,7 +14,6 @@ import {
   LogOut,
   Moon,
   Sun,
-  Target,
   UserCircle,
   Users,
 } from 'lucide-react';
@@ -29,7 +28,6 @@ const navItems = [
   { href: '/dashboard/aluno', label: 'Aluno', icon: GraduationCap, roles: ['STUDENT'] },
   { href: '/tutorias/nova', label: 'Registrar tutoria', icon: ClipboardList, roles: ['TUTOR', 'COORDINATOR', 'ADMIN'] },
   { href: '/historico', label: 'Historico', icon: History, roles: ['STUDENT', 'TUTOR', 'COORDINATOR', 'ADMIN'] },
-  { href: '/metas', label: 'Metas', icon: Target, roles: ['STUDENT', 'TUTOR', 'COORDINATOR', 'ADMIN'] },
   { href: '/projeto-de-vida', label: 'Projeto de Vida', icon: BarChart3, roles: ['STUDENT', 'TUTOR', 'COORDINATOR', 'ADMIN'] },
   { href: '/relatorios', label: 'Relatorios', icon: FileText, roles: ['COORDINATOR', 'ADMIN'] },
   { href: '/usuarios', label: 'Usuarios', icon: Users, roles: ['COORDINATOR', 'ADMIN'] },
