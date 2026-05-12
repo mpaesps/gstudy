@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { Role } from '@prisma/client';
+import { GoalStatus, Role } from '@prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { AuthenticatedUser } from '../auth/authenticated-user';
 
@@ -29,21 +29,50 @@ export class DashboardsService {
     return { student, upcomingSessions, openGoals, indicators };
   }
 
-  async tutor(tutorId?: string) {
-    const where = tutorId ? { tutorId } : {};
-    const [todaySessions, studentsInTutoring, pendingGoals, recentSessions] = await Promise.all([
-      this.prisma.tutoringSession.count({ where: { ...where, status: 'SCHEDULED' } }),
-      this.prisma.sessionParticipant.count({ where: { session: where } }),
-      this.prisma.goal.count({ where: { status: { in: ['OPEN', 'IN_PROGRESS'] } } }),
+  async tutor(tutorId?: string, user?: AuthenticatedUser) {
+    const authenticatedTutor =
+      user?.role === Role.TUTOR ? await this.prisma.tutor.findUnique({ where: { userId: user.id } }) : null;
+    const effectiveTutorId = user?.role === Role.TUTOR ? authenticatedTutor?.id ?? '__not_found__' : tutorId;
+    const where = effectiveTutorId ? { tutorId: effectiveTutorId } : {};
+    const studentWhere = effectiveTutorId ? { participants: { some: { session: { tutorId: effectiveTutorId } } } } : {};
+    const goalWhere = {
+      status: { in: [GoalStatus.OPEN, GoalStatus.IN_PROGRESS] },
+      student: studentWhere,
+    };
+
+    const [scheduledSessions, studentsInTutoringList, pendingGoalsList, recentSessions] = await Promise.all([
+      this.prisma.tutoringSession.findMany({
+        where: { ...where, status: 'SCHEDULED' },
+        include: { tutor: { include: { user: true } }, participants: { include: { student: { include: { user: true } } } } },
+        orderBy: { scheduledAt: 'asc' },
+      }),
+      this.prisma.student.findMany({
+        where: studentWhere,
+        include: { user: true, classGroup: true },
+        orderBy: { user: { name: 'asc' } },
+      }),
+      this.prisma.goal.findMany({
+        where: goalWhere,
+        include: { student: { include: { user: true, classGroup: true } } },
+        orderBy: { dueDate: 'asc' },
+      }),
       this.prisma.tutoringSession.findMany({
         where,
-        include: { participants: { include: { student: { include: { user: true } } } } },
+        include: { tutor: { include: { user: true } }, participants: { include: { student: { include: { user: true } } } } },
         orderBy: { scheduledAt: 'desc' },
         take: 8,
       }),
     ]);
 
-    return { todaySessions, studentsInTutoring, pendingGoals, recentSessions };
+    return {
+      todaySessions: scheduledSessions.length,
+      studentsInTutoring: studentsInTutoringList.length,
+      pendingGoals: pendingGoalsList.length,
+      scheduledSessions,
+      studentsInTutoringList,
+      pendingGoalsList,
+      recentSessions,
+    };
   }
 
   async coordinator() {

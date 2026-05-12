@@ -19,8 +19,8 @@ export class DashboardsController {
 
   @Get('tutor')
   @Roles(Role.TUTOR, Role.COORDINATOR, Role.ADMIN)
-  tutor(@Query('tutorId') tutorId?: string) {
-    return this.dashboardsService.tutor(tutorId);
+  tutor(@Query('tutorId') tutorId: string | undefined, @Request() request: { user: AuthenticatedUser }) {
+    return this.dashboardsService.tutor(tutorId, request.user);
   }
 
   @Get('coordinator')

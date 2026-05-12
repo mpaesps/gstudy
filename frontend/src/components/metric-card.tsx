@@ -8,8 +8,8 @@ const toneClass = {
 };
 
 export function MetricCard({ metric }: { metric: Metric }) {
-  return (
-    <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+  const content = (
+    <>
       <p className="text-sm font-medium text-slate-500">{metric.label}</p>
       <div className="mt-3 flex items-end justify-between gap-3">
         <strong className="text-3xl font-semibold text-slate-950">{metric.value}</strong>
@@ -17,6 +17,23 @@ export function MetricCard({ metric }: { metric: Metric }) {
           {metric.change}
         </span>
       </div>
+    </>
+  );
+
+  if (metric.href) {
+    return (
+      <a
+        href={metric.href}
+        className="block rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-500 hover:shadow-panel"
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+      {content}
     </section>
   );
 }

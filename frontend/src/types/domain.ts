@@ -15,6 +15,7 @@ export type Metric = {
   value: string;
   change: string;
   tone: 'blue' | 'green' | 'orange' | 'red';
+  href?: string;
 };
 
 export type SessionRow = {
@@ -38,4 +39,20 @@ export type ApiSession = {
   calendarStatus?: string;
   tutor?: { user?: { name: string } };
   participants?: Array<{ student?: { user?: { name: string } } }>;
+};
+
+export type ApiStudent = {
+  id: string;
+  registration?: string;
+  user?: { name: string; email?: string };
+  classGroup?: { name: string };
+};
+
+export type ApiGoal = {
+  id: string;
+  title: string;
+  description?: string | null;
+  status: string;
+  dueDate?: string | null;
+  student?: ApiStudent;
 };
