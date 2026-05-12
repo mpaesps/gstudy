@@ -62,6 +62,27 @@ export default function StudentDashboard() {
 
   return (
     <AppShell title="Dashboard do aluno" allowedRoles={['STUDENT']}>
+      <section className="mb-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 className="text-lg font-semibold text-slate-950">Dados do aluno</h2>
+        <dl className="mt-4 grid gap-4 md:grid-cols-4">
+          <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+            <dt className="text-xs font-semibold uppercase text-slate-500">Nome</dt>
+            <dd className="mt-1 font-medium text-slate-950">{user?.name ?? 'Nao informado'}</dd>
+          </div>
+          <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+            <dt className="text-xs font-semibold uppercase text-slate-500">E-mail</dt>
+            <dd className="mt-1 font-medium text-slate-950">{user?.email ?? 'Nao informado'}</dd>
+          </div>
+          <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+            <dt className="text-xs font-semibold uppercase text-slate-500">Matricula</dt>
+            <dd className="mt-1 font-medium text-slate-950">{user?.student?.registration ?? 'Nao informada'}</dd>
+          </div>
+          <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+            <dt className="text-xs font-semibold uppercase text-slate-500">Turma</dt>
+            <dd className="mt-1 font-medium text-slate-950">{user?.student?.classGroup?.name ?? 'Nao informada'}</dd>
+          </div>
+        </dl>
+      </section>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {studentMetrics.map((metric) => (
           <MetricCard key={metric.label} metric={metric} />
