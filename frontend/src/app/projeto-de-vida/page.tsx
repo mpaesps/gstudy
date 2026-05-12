@@ -179,17 +179,6 @@ export default function LifeProjectPage() {
           </div>
         </div>
 
-        {isCoordinationView ? (
-          <div className="mt-4 grid gap-4 md:grid-cols-3">
-            {fields.map(([label, value]) => (
-              <article key={label} className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                <p className="text-xs font-semibold uppercase text-slate-500">{label}</p>
-                <p className="mt-2 whitespace-pre-wrap text-sm text-slate-700">{value || 'Nao informado'}</p>
-              </article>
-            ))}
-          </div>
-        ) : null}
-
         <div className="mt-4 grid gap-4 md:grid-cols-3">
           {activeGoals.length ? activeGoals.map((goal) => (
             <article key={goal.id} className="rounded-md border border-slate-200 p-4">
@@ -200,16 +189,26 @@ export default function LifeProjectPage() {
               <p className="mt-3 text-sm font-medium text-slate-700">
                 Prazo: {goal.dueDate ? formatDate(goal.dueDate) : 'Nao informado'}
               </p>
+              {isCoordinationView ? (
+                <dl className="mt-3 space-y-2 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm">
+                  <div>
+                    <dt className="text-xs font-semibold uppercase text-slate-500">Interesses</dt>
+                    <dd className="mt-1 whitespace-pre-wrap text-slate-700">{lifeProject?.interests || 'Nao informado'}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs font-semibold uppercase text-slate-500">Pontos fortes</dt>
+                    <dd className="mt-1 whitespace-pre-wrap text-slate-700">{lifeProject?.strengths || 'Nao informado'}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs font-semibold uppercase text-slate-500">Sonhos</dt>
+                    <dd className="mt-1 whitespace-pre-wrap text-slate-700">{lifeProject?.dreams || 'Nao informado'}</dd>
+                  </div>
+                </dl>
+              ) : null}
             </article>
           )) : <p className="text-sm text-slate-500">Nenhuma meta aberta para usar como proximo passo.</p>}
         </div>
 
-        {lifeProject?.nextSteps ? (
-          <div className="mt-5 rounded-md border border-slate-200 bg-slate-50 p-4">
-            <p className="text-xs font-semibold uppercase text-slate-500">Anotacoes anteriores de proximos passos</p>
-            <p className="mt-2 whitespace-pre-wrap text-sm text-slate-700">{lifeProject.nextSteps}</p>
-          </div>
-        ) : null}
       </section>
 
       {canCreateGoals ? (
