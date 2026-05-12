@@ -31,13 +31,14 @@ export class GoalsService {
         dueDate: dto.dueDate ? new Date(dto.dueDate) : undefined,
         createdById: user.id,
       },
+      include: this.defaultInclude(),
     });
   }
 
   findByStudent(studentId: string) {
     return this.prisma.goal.findMany({
       where: { studentId },
-      include: { actionPlans: true },
+      include: this.defaultInclude(),
       orderBy: { createdAt: 'desc' },
     });
   }
@@ -51,6 +52,20 @@ export class GoalsService {
         status: dto.status,
         dueDate: dto.dueDate ? new Date(dto.dueDate) : undefined,
       },
+      include: this.defaultInclude(),
     });
+  }
+
+  private defaultInclude() {
+    return {
+      actionPlans: true,
+      createdBy: { select: { id: true, name: true, email: true, role: true } },
+      student: {
+        include: {
+          user: { select: { id: true, name: true, email: true, role: true } },
+          classGroup: true,
+        },
+      },
+    };
   }
 }

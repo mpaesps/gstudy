@@ -94,6 +94,7 @@ export default function LifeProjectPage() {
 
   const activeGoals = goals.filter((goal) => ['OPEN', 'IN_PROGRESS'].includes(goal.status));
   const canCreateGoals = user?.role === 'TUTOR' || user?.role === 'COORDINATOR' || user?.role === 'ADMIN';
+  const selectedStudent = students.find((student) => student.id === selectedStudentId);
 
   async function handleCreateGoal(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -127,7 +128,7 @@ export default function LifeProjectPage() {
       {user?.role !== 'STUDENT' ? (
         <section className="mb-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <label className="text-sm font-medium text-slate-700">
-            Aluno acompanhado
+            Aluno registrado
             <select
               value={selectedStudentId}
               onChange={(event) => setSelectedStudentId(event.target.value)}
@@ -140,6 +141,12 @@ export default function LifeProjectPage() {
               ))}
             </select>
           </label>
+          {selectedStudent ? (
+            <p className="mt-3 text-sm text-slate-500">
+              Projeto de Vida de <span className="font-semibold text-slate-700">{selectedStudent.user?.name ?? selectedStudent.registration}</span>
+              {selectedStudent.classGroup?.name ? ` - ${selectedStudent.classGroup.name}` : ''}
+            </p>
+          ) : null}
         </section>
       ) : null}
 
@@ -174,6 +181,8 @@ export default function LifeProjectPage() {
           {activeGoals.length ? activeGoals.map((goal) => (
             <article key={goal.id} className="rounded-md border border-slate-200 p-4">
               <p className="font-semibold text-slate-950">{goal.title}</p>
+              <p className="mt-1 text-sm text-slate-500">Aluno: {goal.student?.user?.name ?? selectedStudent?.user?.name ?? 'Nao informado'}</p>
+              <p className="text-sm text-slate-500">Professor: {goal.createdBy?.name ?? 'Nao informado'}</p>
               {goal.description ? <p className="mt-2 text-sm text-slate-500">{goal.description}</p> : null}
               <p className="mt-3 text-sm font-medium text-slate-700">
                 Prazo: {goal.dueDate ? formatDate(goal.dueDate) : 'Nao informado'}

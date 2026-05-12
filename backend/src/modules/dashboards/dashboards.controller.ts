@@ -12,7 +12,7 @@ export class DashboardsController {
   constructor(private readonly dashboardsService: DashboardsService) {}
 
   @Get('student/:id')
-  @Roles(Role.STUDENT, Role.ADMIN)
+  @Roles(Role.STUDENT, Role.COORDINATOR, Role.ADMIN)
   student(@Param('id') id: string, @Request() request: { user: AuthenticatedUser }) {
     return this.dashboardsService.student(id, request.user);
   }

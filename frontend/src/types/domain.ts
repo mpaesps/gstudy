@@ -48,6 +48,12 @@ export type ApiStudent = {
   classGroup?: { name: string };
 };
 
+export type ApiTutor = {
+  id: string;
+  subject?: string | null;
+  user?: { name: string; email?: string };
+};
+
 export type ApiGoal = {
   id: string;
   title: string;
@@ -55,4 +61,5 @@ export type ApiGoal = {
   status: string;
   dueDate?: string | null;
   student?: ApiStudent;
+  createdBy?: { id: string; name: string; email?: string; role?: Role };
 };

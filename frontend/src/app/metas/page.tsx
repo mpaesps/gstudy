@@ -24,6 +24,7 @@ export default function GoalsPage() {
   const [selectedStudentId, setSelectedStudentId] = useState('');
   const [goals, setGoals] = useState<ApiGoal[]>([]);
   const [lifeProject, setLifeProject] = useState<LifeProject | null>(null);
+  const selectedStudent = students.find((student) => student.id === selectedStudentId);
 
   useEffect(() => {
     async function loadStudents() {
@@ -84,7 +85,7 @@ export default function GoalsPage() {
       {user?.role !== 'STUDENT' ? (
         <section className="mb-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <label className="text-sm font-medium text-slate-700">
-            Aluno acompanhado
+            Aluno registrado
             <select
               value={selectedStudentId}
               onChange={(event) => setSelectedStudentId(event.target.value)}
@@ -97,6 +98,12 @@ export default function GoalsPage() {
               ))}
             </select>
           </label>
+          {selectedStudent ? (
+            <p className="mt-3 text-sm text-slate-500">
+              Metas de <span className="font-semibold text-slate-700">{selectedStudent.user?.name ?? selectedStudent.registration}</span>
+              {selectedStudent.classGroup?.name ? ` - ${selectedStudent.classGroup.name}` : ''}
+            </p>
+          ) : null}
         </section>
       ) : null}
 
@@ -131,6 +138,10 @@ export default function GoalsPage() {
           <section key={goal.title} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="font-semibold text-slate-950">{goal.title}</h2>
             <p className="mt-2 text-sm text-slate-500">{goal.status}</p>
+            <div className="mt-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+              <p>Aluno: <span className="font-medium text-slate-950">{goal.student?.user?.name ?? selectedStudent?.user?.name ?? 'Nao informado'}</span></p>
+              <p>Professor: <span className="font-medium text-slate-950">{goal.createdBy?.name ?? 'Nao informado'}</span></p>
+            </div>
             {goal.description ? <p className="mt-3 text-sm text-slate-700">{goal.description}</p> : null}
             <p className="mt-4 text-sm font-medium text-slate-700">
               Proximo passo ate: {goal.dueDate ? formatDate(goal.dueDate) : 'Nao informado'}
