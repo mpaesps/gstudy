@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <defs>
+    <style>
+      .bg{fill:#f8fafc}
+      .title{font:700 34px Arial, sans-serif;fill:#0f172a}
+      .subtitle{font:400 16px Arial, sans-serif;fill:#64748b}
+      .entity{fill:#fff;stroke:#cbd5e1;stroke-width:2;rx:14}
+      .head{fill:#1d4ed8;rx:14}
+      .headText{font:700 16px Arial, sans-serif;fill:#fff}
+      .field{font:400 13px Arial, sans-serif;fill:#334155}
+      .pk{font:700 13px Arial, sans-serif;fill:#0f172a}
+      .rel{stroke:#2563eb;stroke-width:2.5;fill:none}
+      .label{font:700 12px Arial, sans-serif;fill:#1d4ed8}
+    </style>
+  </defs>
+  <rect class="bg" width="1600" height="1100"/>
+  <text class="title" x="60" y="65">Diagrama do Banco de Dados - Gstudy</text>
+  <text class="subtitle" x="60" y="95">Modelo relacional baseado no Prisma Schema com PostgreSQL.</text>
+
+  <g transform="translate(70,150)">
+    <rect class="entity" width="250" height="170"/><rect class="head" width="250" height="42"/>
+    <text class="headText" x="18" y="27">User</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">name, email, passwordHash</text>
+    <text class="field" x="18" y="116">role, status</text><text class="field" x="18" y="140">createdAt, updatedAt</text>
+  </g>
+  <g transform="translate(420,150)">
+    <rect class="entity" width="250" height="170"/><rect class="head" width="250" height="42"/>
+    <text class="headText" x="18" y="27">Student</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">FK userId</text>
+    <text class="field" x="18" y="116">registration, classGroupId</text><text class="field" x="18" y="140">birthDate</text>
+  </g>
+  <g transform="translate(770,150)">
+    <rect class="entity" width="250" height="145"/><rect class="head" width="250" height="42"/>
+    <text class="headText" x="18" y="27">Tutor</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">FK userId</text>
+    <text class="field" x="18" y="116">subject, createdAt</text>
+  </g>
+  <g transform="translate(1130,150)">
+    <rect class="entity" width="250" height="145"/><rect class="head" width="250" height="42"/>
+    <text class="headText" x="18" y="27">School</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">name, city, state</text>
+    <text class="field" x="18" y="116">createdAt</text>
+  </g>
+  <g transform="translate(1130,370)">
+    <rect class="entity" width="250" height="145"/><rect class="head" width="250" height="42"/>
+    <text class="headText" x="18" y="27">ClassGroup</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">name, year</text>
+    <text class="field" x="18" y="116">FK schoolId</text>
+  </g>
+
+  <g transform="translate(560,420)">
+    <rect class="entity" width="300" height="195"/><rect class="head" width="300" height="42"/>
+    <text class="headText" x="18" y="27">TutoringSession</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">FK tutorId</text>
+    <text class="field" x="18" y="116">type, title, description</text><text class="field" x="18" y="140">scheduledAt, completedAt</text>
+    <text class="field" x="18" y="164">status, periodicity</text>
+  </g>
+  <g transform="translate(210,450)">
+    <rect class="entity" width="260" height="145"/><rect class="head" width="260" height="42"/>
+    <text class="headText" x="18" y="27">SessionParticipant</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">FK sessionId</text>
+    <text class="field" x="18" y="116">FK studentId</text>
+  </g>
+  <g transform="translate(910,450)">
+    <rect class="entity" width="260" height="145"/><rect class="head" width="260" height="42"/>
+    <text class="headText" x="18" y="27">Attendance</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">FK sessionId, studentId</text>
+    <text class="field" x="18" y="116">present, notes</text>
+  </g>
+
+  <g transform="translate(70,760)">
+    <rect class="entity" width="250" height="170"/><rect class="head" width="250" height="42"/>
+    <text class="headText" x="18" y="27">LifeProject</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">FK studentId</text>
+    <text class="field" x="18" y="116">interests, strengths</text><text class="field" x="18" y="140">dreams, nextSteps</text>
+  </g>
+  <g transform="translate(420,760)">
+    <rect class="entity" width="250" height="170"/><rect class="head" width="250" height="42"/>
+    <text class="headText" x="18" y="27">Goal</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">FK studentId</text>
+    <text class="field" x="18" y="116">FK createdById</text><text class="field" x="18" y="140">title, status, dueDate</text>
+  </g>
+  <g transform="translate(770,760)">
+    <rect class="entity" width="250" height="145"/><rect class="head" width="250" height="42"/>
+    <text class="headText" x="18" y="27">ActionPlan</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">FK goalId</text>
+    <text class="field" x="18" y="116">description, dueDate</text>
+  </g>
+  <g transform="translate(1130,680)">
+    <rect class="entity" width="250" height="145"/><rect class="head" width="250" height="42"/>
+    <text class="headText" x="18" y="27">Indicator</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">FK studentId</text>
+    <text class="field" x="18" y="116">performance, attendance</text>
+  </g>
+  <g transform="translate(1130,880)">
+    <rect class="entity" width="250" height="145"/><rect class="head" width="250" height="42"/>
+    <text class="headText" x="18" y="27">Alert / Report</text>
+    <text class="pk" x="18" y="68">PK id</text><text class="field" x="18" y="92">alerts by student</text>
+    <text class="field" x="18" y="116">reports by filters</text>
+  </g>
+
+  <path class="rel" d="M320 235 H420"/><text class="label" x="350" y="225">1:1</text>
+  <path class="rel" d="M320 270 C520 350 720 210 770 220"/><text class="label" x="525" y="320">1:1</text>
+  <path class="rel" d="M1255 295 V370"/><text class="label" x="1270" y="340">1:N</text>
+  <path class="rel" d="M1130 445 H670 V320"/><text class="label" x="900" y="435">1:N</text>
+  <path class="rel" d="M895 295 V420"/><text class="label" x="905" y="360">1:N</text>
+  <path class="rel" d="M560 520 H470"/><text class="label" x="500" y="510">N:N</text>
+  <path class="rel" d="M860 520 H910"/><text class="label" x="872" y="510">1:N</text>
+  <path class="rel" d="M420 300 C310 540 210 650 195 760"/><text class="label" x="250" y="650">1:1</text>
+  <path class="rel" d="M545 320 V760"/><text class="label" x="560" y="690">1:N</text>
+  <path class="rel" d="M670 845 H770"/><text class="label" x="705" y="835">1:N</text>
+  <path class="rel" d="M670 180 C700 80 155 70 195 150"/><text class="label" x="475" y="105">createdBy</text>
+  <path class="rel" d="M670 255 H1130"/><text class="label" x="880" y="245">ClassGroup 1:N Student</text>
+  <path class="rel" d="M670 300 C980 530 1190 520 1255 680"/><text class="label" x="1020" y="585">1:N</text>
+  <path class="rel" d="M670 285 C1030 620 1180 775 1255 880"/><text class="label" x="1070" y="810">1:N</text>
+</svg>

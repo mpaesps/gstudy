@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="950" viewBox="0 0 1500 950">
+  <defs>
+    <style>
+      .bg{fill:#f6f8fb}
+      .title{font:700 34px Arial, sans-serif;fill:#0f172a}
+      .subtitle{font:400 16px Arial, sans-serif;fill:#64748b}
+      .lane{fill:#fff;stroke:#dbe3ef;stroke-width:2;rx:18}
+      .step{fill:#eff6ff;stroke:#2563eb;stroke-width:2;rx:14}
+      .step2{fill:#ecfdf5;stroke:#16a34a;stroke-width:2;rx:14}
+      .step3{fill:#fff7ed;stroke:#f97316;stroke-width:2;rx:14}
+      .h{font:700 18px Arial, sans-serif;fill:#0f172a}
+      .t{font:400 14px Arial, sans-serif;fill:#334155}
+      .laneTitle{font:700 18px Arial, sans-serif;fill:#1d4ed8}
+      .arrow{stroke:#2563eb;stroke-width:3;fill:none;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1500" height="950"/>
+  <text class="title" x="60" y="65">Fluxo de Funcionamento do Sistema Gstudy</text>
+  <text class="subtitle" x="60" y="95">Fluxo operacional com autenticacao, permissoes, tutoria, Projeto de Vida, dashboards e relatorios.</text>
+
+  <rect class="lane" x="60" y="140" width="1380" height="190"/>
+  <text class="laneTitle" x="90" y="175">1. Acesso e permissao</text>
+  <rect class="step" x="95" y="205" width="250" height="82"/>
+  <text class="h" x="120" y="235">Login</text><text class="t" x="120" y="260">E-mail e senha</text>
+  <rect class="step" x="430" y="205" width="250" height="82"/>
+  <text class="h" x="455" y="235">JWT</text><text class="t" x="455" y="260">Token autenticado</text>
+  <rect class="step" x="765" y="205" width="250" height="82"/>
+  <text class="h" x="790" y="235">RBAC</text><text class="t" x="790" y="260">Aluno, tutor, coordenacao</text>
+  <rect class="step" x="1100" y="205" width="250" height="82"/>
+  <text class="h" x="1125" y="235">Tela inicial</text><text class="t" x="1125" y="260">Dashboard por perfil</text>
+  <path class="arrow" d="M345 246 H430"/><path class="arrow" d="M680 246 H765"/><path class="arrow" d="M1015 246 H1100"/>
+
+  <rect class="lane" x="60" y="370" width="1380" height="215"/>
+  <text class="laneTitle" x="90" y="405">2. Operacao pedagogica</text>
+  <rect class="step2" x="95" y="435" width="250" height="95"/>
+  <text class="h" x="120" y="465">Professor</text><text class="t" x="120" y="490">Registra tutoria</text><text class="t" x="120" y="512">individual ou coletiva</text>
+  <rect class="step2" x="430" y="435" width="250" height="95"/>
+  <text class="h" x="455" y="465">Frequencia</text><text class="t" x="455" y="490">Participantes recebem</text><text class="t" x="455" y="512">presenca e observacoes</text>
+  <rect class="step2" x="765" y="435" width="250" height="95"/>
+  <text class="h" x="790" y="465">Projeto de Vida</text><text class="t" x="790" y="490">Interesses, sonhos e</text><text class="t" x="790" y="512">pontos fortes</text>
+  <rect class="step2" x="1100" y="435" width="250" height="95"/>
+  <text class="h" x="1125" y="465">Proximos passos</text><text class="t" x="1125" y="490">Metas criadas pelo</text><text class="t" x="1125" y="512">professor/tutor</text>
+  <path class="arrow" d="M345 482 H430"/><path class="arrow" d="M680 482 H765"/><path class="arrow" d="M1015 482 H1100"/>
+
+  <rect class="lane" x="60" y="625" width="1380" height="235"/>
+  <text class="laneTitle" x="90" y="660">3. Acompanhamento e gestao</text>
+  <rect class="step3" x="95" y="700" width="250" height="105"/>
+  <text class="h" x="120" y="730">Aluno</text><text class="t" x="120" y="755">Consulta progresso,</text><text class="t" x="120" y="777">tutorias e proximos passos</text>
+  <rect class="step3" x="430" y="700" width="250" height="105"/>
+  <text class="h" x="455" y="730">Tutor</text><text class="t" x="455" y="755">Ve alunos acompanhados,</text><text class="t" x="455" y="777">tutorias e metas pendentes</text>
+  <rect class="step3" x="765" y="700" width="250" height="105"/>
+  <text class="h" x="790" y="730">Coordenacao</text><text class="t" x="790" y="755">Visao geral e individual</text><text class="t" x="790" y="777">de alunos e professores</text>
+  <rect class="step3" x="1100" y="700" width="250" height="105"/>
+  <text class="h" x="1125" y="730">Indicadores</text><text class="t" x="1125" y="755">Frequencia, desempenho,</text><text class="t" x="1125" y="777">alertas e relatorios</text>
+  <path class="arrow" d="M345 752 H430"/><path class="arrow" d="M680 752 H765"/><path class="arrow" d="M1015 752 H1100"/>
+
+  <path class="arrow" d="M1225 287 C1320 360 1320 390 1225 435"/>
+  <path class="arrow" d="M1225 530 C1320 610 1320 650 1225 700"/>
+</svg>

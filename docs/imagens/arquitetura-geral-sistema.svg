@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <style>
+      .bg{fill:#f6f8fb}
+      .title{font:700 34px Arial, sans-serif;fill:#0f172a}
+      .subtitle{font:400 16px Arial, sans-serif;fill:#64748b}
+      .card{fill:#ffffff;stroke:#dbe3ef;stroke-width:2;rx:18}
+      .card-blue{fill:#eff6ff;stroke:#2563eb;stroke-width:2;rx:18}
+      .card-green{fill:#ecfdf5;stroke:#16a34a;stroke-width:2;rx:18}
+      .card-orange{fill:#fff7ed;stroke:#f97316;stroke-width:2;rx:18}
+      .h{font:700 20px Arial, sans-serif;fill:#0f172a}
+      .t{font:400 15px Arial, sans-serif;fill:#334155}
+      .small{font:400 13px Arial, sans-serif;fill:#64748b}
+      .pill{fill:#1d4ed8;rx:18}
+      .pillText{font:700 13px Arial, sans-serif;fill:#fff}
+      .arrow{stroke:#2563eb;stroke-width:3;fill:none;marker-end:url(#arrow)}
+      .line{stroke:#94a3b8;stroke-width:2;stroke-dasharray:6 6}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1400" height="900"/>
+  <text class="title" x="70" y="70">Arquitetura Geral do Sistema Gstudy</text>
+  <text class="subtitle" x="70" y="100">Aplicacao web em monorepo com frontend Next.js, backend NestJS, Prisma ORM e PostgreSQL.</text>
+
+  <rect class="card-blue" x="70" y="160" width="270" height="170"/>
+  <text class="h" x="100" y="205">Usuarios</text>
+  <text class="t" x="100" y="240">Aluno</text>
+  <text class="t" x="100" y="268">Professor/Tutor</text>
+  <text class="t" x="100" y="296">Coordenacao/Admin</text>
+
+  <rect class="card" x="430" y="135" width="300" height="220"/>
+  <text class="h" x="460" y="180">Frontend</text>
+  <text class="t" x="460" y="215">Next.js + React</text>
+  <text class="t" x="460" y="243">TypeScript</text>
+  <text class="t" x="460" y="271">TailwindCSS</text>
+  <text class="small" x="460" y="310">Dashboards, formularios,</text>
+  <text class="small" x="460" y="330">perfil, dark mode e RBAC visual.</text>
+
+  <rect class="card" x="820" y="135" width="300" height="220"/>
+  <text class="h" x="850" y="180">Backend</text>
+  <text class="t" x="850" y="215">NestJS + Node.js</text>
+  <text class="t" x="850" y="243">API REST</text>
+  <text class="t" x="850" y="271">JWT + Guards</text>
+  <text class="small" x="850" y="310">Modulos de dominio, regras</text>
+  <text class="small" x="850" y="330">de negocio e permissoes.</text>
+
+  <rect class="card-green" x="520" y="470" width="270" height="170"/>
+  <text class="h" x="550" y="515">Prisma ORM</text>
+  <text class="t" x="550" y="550">Models e migrations</text>
+  <text class="t" x="550" y="578">Acesso tipado ao banco</text>
+  <text class="small" x="550" y="615">Camada de persistencia</text>
+
+  <rect class="card-orange" x="900" y="470" width="270" height="170"/>
+  <text class="h" x="930" y="515">PostgreSQL</text>
+  <text class="t" x="930" y="550">Banco relacional</text>
+  <text class="t" x="930" y="578">Dados pedagogicos</text>
+  <text class="small" x="930" y="615">Docker: gstudy-postgres</text>
+
+  <rect class="card" x="120" y="510" width="300" height="220"/>
+  <text class="h" x="150" y="555">Dominios Principais</text>
+  <text class="t" x="150" y="590">Tutorias e frequencia</text>
+  <text class="t" x="150" y="618">Projeto de Vida</text>
+  <text class="t" x="150" y="646">Metas como proximos passos</text>
+  <text class="t" x="150" y="674">Dashboards e relatorios</text>
+
+  <path class="arrow" d="M340 245 H430"/>
+  <path class="arrow" d="M730 245 H820"/>
+  <path class="arrow" d="M970 355 V470"/>
+  <path class="arrow" d="M790 555 H900"/>
+  <path class="arrow" d="M820 330 C690 420 610 430 420 565"/>
+
+  <line class="line" x1="70" y1="785" x2="1330" y2="785"/>
+  <rect class="pill" x="70" y="815" width="160" height="34"/>
+  <text class="pillText" x="95" y="837">Docker Compose</text>
+  <text class="small" x="250" y="837">frontend:3000  |  backend:3333/api  |  postgres:5432</text>
+</svg>
